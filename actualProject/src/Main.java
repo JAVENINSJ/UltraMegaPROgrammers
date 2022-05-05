@@ -3,8 +3,15 @@
 //Līva Puķīte 211RDB036 9.grupa
 //Anastasija Šarakova 211RDB093 9.grupa
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -18,6 +25,7 @@ public class Main {
 		
 		loop: while (true) {
 			
+			System.out.println("Enter choice:");
 			choiseStr = sc.next();
 								
 			switch (choiseStr) {
@@ -45,7 +53,7 @@ public class Main {
 				firstFile = sc.next();
 				System.out.print("second file name: ");
 				secondFile = sc.next();
-				System.out.println(equal(firstFile, secondFile));
+				System.out.println(equal(firstFile, secondFile)); 
 				break;
 			case "about":
 				about();
@@ -59,9 +67,79 @@ public class Main {
 	}
 
 	public static void comp(String sourceFile, String resultFile) {
-		// TODO: implement this method	
+		byte[] bytes = fileToBytes(sourceFile);
+		System.out.println(Arrays.toString(bytes));
+		// TODO insert logic func here
+	}
+	
+	public static byte[] fileToBytes(String filePath) {
+		
+		File file = new File(filePath);
+		FileInputStream fileIn = null;
+		FileChannel ch = null;
+		StringBuilder output = new StringBuilder();
+		int size;
+		MappedByteBuffer buffer;
+		byte[] bytes;
+		
+		try {
+			fileIn = new FileInputStream(file);
+			ch = fileIn.getChannel();
+			size = (int) ch.size();
+			buffer = ch.map(MapMode.READ_ONLY, 0, size);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {	
+				if (fileIn != null) fileIn.close();
+				if (ch != null) ch.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		bytes = new byte[size];
+		buffer.get(bytes);
+		
+		return bytes;
 	}
 
+	public static String binToFile(String filePath) {
+		
+		File file = new File(filePath);
+		FileInputStream fileIn = null;
+		FileChannel ch = null;
+		StringBuilder output = new StringBuilder();
+		int size;
+		MappedByteBuffer buffer;
+		byte[] bytes;
+		
+		try {
+			fileIn = new FileInputStream(file);
+			ch = fileIn.getChannel();
+			size = (int) ch.size();
+			buffer = ch.map(MapMode.READ_ONLY, 0, size);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {	
+				if (fileIn != null) fileIn.close();
+				if (ch != null) ch.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		bytes = new byte[size];
+		buffer.get(bytes);
+		for(byte bt: bytes) output.append(Integer.toBinaryString(bt));
+		
+		return output.toString();
+	}
+
+	
 	public static void decomp(String sourceFile, String resultFile) {
 		// TODO: implement this method
 	}
