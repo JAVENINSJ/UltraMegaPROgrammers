@@ -3,12 +3,17 @@
 //Līva Puķīte 211RDB036 9.grupa
 //Anastasija Šarakova 211RDB093 9.grupa
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 class FileManipulator {
@@ -46,12 +51,21 @@ class FileManipulator {
 	}
 
 	public static byte[] binStrToBytes(String binStr) {
-		//TODO bin to byte logic here
-		return null;
+		try {
+			return (new BigInteger(binStr, 2)).toByteArray();
+		} catch (Exception e) {
+			System.out.println("Binary string contains invalid values, returning null...");
+			return null;
+		}		
 	}
 	
 	public static void bytesToFile(byte[] bytes, String filePath) {
-		//TODO byte logic here
+		InputStream is = new ByteArrayInputStream(bytes);
+		try {
+			Files.copy(is, new File(filePath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			System.out.println("Error writing to file...");
+		}
 	}
 	
 }
