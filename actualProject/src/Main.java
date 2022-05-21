@@ -3,17 +3,19 @@
 //Līva Puķīte 211RDB036 9.grupa
 //Anastasija Šarakova 211RDB093 9.grupa
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class FileManipulator {
@@ -60,11 +62,12 @@ class FileManipulator {
 	}
 	
 	public static void bytesToFile(byte[] bytes, String filePath) {
-		InputStream is = new ByteArrayInputStream(bytes);
 		try {
-			Files.copy(is, new File(filePath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+			Files.write(Paths.get(filePath), bytes, StandardOpenOption.CREATE);
+			System.out.println(Paths.get(filePath).toString());
 		} catch (IOException e) {
-			System.out.println("Error writing to file...");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -72,21 +75,181 @@ class FileManipulator {
 
 class Compressor {
 	
-	public static void compressFile(String filePath, String archivePath) {
-		//TODO compression logic here
-		// Oto
+	private static FileManipulator fm = new FileManipulator();
+	
+	public class LZSS {
+		
+		final int SLIDING_WINDOW_SIZE = 4096;
+		final byte START_OF_TOKEN = 2;
+		final byte END_OF_TOKEN = 3;
+		
+		private LZSS(){}
+				
+		protected String decode(byte[] input) {
+			
+			boolean inToken = false, scanningOffset = true;
+			
+			ArrayList<Byte> length = new ArrayList<Byte>();
+			ArrayList<Byte> offset = new ArrayList<Byte>();			
+			
+			ArrayList<Byte> output = new ArrayList<Byte>();
+			int lengthVal, offsetVal;
+			List<Byte> referencedText;
+			
+			for(Byte ch: input) {
+				if(ch.byteValue() == START_OF_TOKEN) {
+					inToken = true;
+					scanningOffset = true;
+				}else if((char) ch.byteValue() == ',' && inToken) {
+					scanningOffset = false;
+				}else if(ch.byteValue() == END_OF_TOKEN) {
+					inToken = false;
+					
+					lengthVal = valFromList(length);
+					offsetVal = valFromList(offset);
+					
+					referencedText = output.subList(output.size()-offsetVal, output.size()-offsetVal + lengthVal);
+					output.addAll(referencedText);
+					
+					length = new ArrayList<Byte>();
+					offset = new ArrayList<Byte>();
+				}else if(inToken) {
+					if(scanningOffset) {
+						offset.add(ch);
+					}else {
+						length.add(ch);
+					}
+				}else {
+					output.add(ch.byteValue());
+				}			
+			}
+			
+			String fin = "";
+			for(Byte b: output) fin += (char) b.byteValue();
+			
+			return fin;
+		}
+		
+		private int valFromList(ArrayList<Byte> ls) {
+			String sum = "";
+			for(Byte bt: ls) {
+				sum += (char) bt.byteValue();
+			}
+			return Integer.parseInt(sum);
+		}
+		
+		private int elementsInArray(List<Byte> checkElements, List<Byte> elements) {
+			int i = 0, offset = 0;
+			
+			for(Byte element: elements) {
+				if(checkElements.size() <= offset) return i - checkElements.size();
+				
+				if(checkElements.get(offset) == element) offset++;
+				else {
+					offset = 0;
+				}
+				
+				i++;
+			}
+						
+			return -1;
+		}
+		
+		private String encode(byte[] input) {
+
+			List<Byte> searchBuffer = new ArrayList<Byte>();
+			ArrayList<Byte> checkedChars = new ArrayList<Byte>();
+			ArrayList<Byte> checkedCharsPlusCurr = new ArrayList<Byte>();
+			List<Byte> output = new ArrayList<Byte>();
+			String token;
+			int i = 0, index, offset, length; 
+			
+			
+			for(Byte bt: input) {
+				index = elementsInArray(checkedChars, searchBuffer);
+				
+				checkedCharsPlusCurr = (ArrayList<Byte>) checkedChars.clone();
+				checkedCharsPlusCurr.add(bt);
+				
+				if(elementsInArray(checkedCharsPlusCurr, searchBuffer) == -1 || i == input.length - 1) {
+					if(i == input.length - 1 && elementsInArray(checkedCharsPlusCurr, searchBuffer) != -1) {
+						checkedChars.add(bt);
+					}
+					
+					if(checkedChars.size() > 1) {
+						index = elementsInArray(checkedChars, searchBuffer);
+						offset = i - index - checkedChars.size();
+						length = checkedChars.size();
+						token = String.format("%c%d,%d%c",
+								START_OF_TOKEN,
+								offset,
+								length,
+								END_OF_TOKEN);
+						
+						if(token.length() > length) {
+							output.addAll(checkedChars);
+						}else {
+							for(byte b: token.getBytes()) {
+								output.add(b);
+							}
+						}
+						searchBuffer.addAll(checkedChars);
+					}else {
+						output.addAll(checkedChars);
+						searchBuffer.addAll(checkedChars);
+					}
+					
+					checkedChars = new ArrayList<Byte>();
+				}
+				
+				checkedChars.add(bt);
+				
+				if(searchBuffer.size() > SLIDING_WINDOW_SIZE) {
+					searchBuffer = searchBuffer.subList(1, searchBuffer.size());
+				}
+				
+				i++;
+			}
+			
+			StringBuilder sb = new StringBuilder();
+			for(Byte bt: output) {
+				sb.append((char) bt.byteValue());
+			}
+			
+			return sb.toString();
+		}
+	
 	}
 	
-	public static void decompressFile(String archivePath, String filePath) {
-		//TODO decoding logic here
+	public void compressFile(String filePath, String archivePath) {
+		LZSS lzss = this.new LZSS();
+		byte[] input = fm.fileToBytes(filePath);
+		
+		String lzssEncodedText = lzss.encode(input);
+		byte[] lzssEncodedTextAsBytes = lzssEncodedText.getBytes(); 
+		
+		fm.bytesToFile(lzssEncodedTextAsBytes, archivePath);
+	}
+	
+	public void decompressFile(String archivePath, String filePath) {
+		LZSS lzss = this.new LZSS();
+		byte[] input = fm.fileToBytes(archivePath);
+		
+		String lzssDecodedText = lzss.decode(input);
+		byte[] lzssDecodedTextAsBytes = lzssDecodedText.getBytes(); 
+		
+		fm.bytesToFile(lzssDecodedTextAsBytes, filePath);
 	}
 	
 }
 
 public class Main {
-
+	
+	static Compressor compressor;
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		compressor = new Compressor();
 		String choiceStr, sourceFile, resultFile, firstFile, secondFile;
 		boolean runFlag = true;
 		
@@ -136,12 +299,12 @@ public class Main {
 
 	public static void comp(String sourceFile, String resultFile) {
 		System.out.printf("Compressing file of path '%s' to archive path '%s'%n", sourceFile, resultFile);
-		Compressor.compressFile(sourceFile, resultFile);
+		compressor.compressFile(sourceFile, resultFile);
 	}
 
 	public static void decomp(String sourceFile, String resultFile) {
 		System.out.printf("Decompressing archive of path '%s' to file path '%s'%n", sourceFile, resultFile);
-		Compressor.decompressFile(sourceFile, resultFile);
+		compressor.decompressFile(sourceFile, resultFile);
 	}
 
 	public static void size(String sourceFile) {
