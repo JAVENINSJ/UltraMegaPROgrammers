@@ -1,0 +1,250 @@
+[paslēpt]
+CEE Spring Logo transparent.svg
+Piedalies starptautiskā rakstu konkursā «CEE Spring 2021»
+par Centrālās un Austrumeiropas valstīm un saņem balvas!
+Konkurss norisinās no 21. marta līdz 31. maijam
+Java (programmēšanas valoda)
+Vikipēdijas lapa
+Jump to navigation Jump to search
+Šis raksts ir par programmēšanas valodu. Par citām jēdziena Java nozīmēm skatīt nozīmju atdalīšanas lapu.
+Java
+Java logo.svg
+Paradigma	Objektorientēta, strukturēta, imperatīva
+Izveidota	1995
+Autors	Sun Microsystems
+Pašreizējā versija	
+Java Standard Edition 7 (1.7.0_51)
+
+(2014-01-14; 7 gadi)
+Galvenās implementācijas	Vairākas
+Dialekti	Generic Java, Pizza
+Ietekmējusies no	Ada 83, C++, C#,[1] Delphi Object Pascal,[2] Eiffel,[3] Generic Java, Mesa,[4] Modula-3,[5] Objective-C,[6] UCSD Pascal,[7][8] Smalltalk
+Ietekmējusi	Ada 2005, C#, Clojure, D, ECMAScript, Groovy, J#, PHP, Scala, JavaScript, Python, BeanShell
+OS	Vairākplatformu
+Licence	GNU Vispārējā publiskā licence / Java kopienas process
+Tīmekļa vietne	www.oracle.com/java/
+Java ir firmas Sun Microsystems izstrādāta objektorientēta programmēšanas valoda. Valoda, kuras sākotnējais nosaukums bija Oak, tika veidota kā C++ aizstājēja, lai gan tās funkcionalitāte ir tuvāka Objective C.
+
+Satura rādītājs
+1 Vēsture
+2 Mērķi
+3 Sveika, pasaule!
+4 Atsauces
+5 Ārējās saites
+Vēsture[labot šo sadaļu | labot pirmkodu]
+Valodu 1991. gadā izstrādāja Džeimss Goslings (James Gosling), Patriks Noutons (Patrick Naughton), Kriss Varts (Chris Warth), Eds Franks (Ed Frank) un Maiks Šeridans (Mike Sheridan) no kompānijas Sun Microsystems, kā daļu no Zaļā projekta (Green project). Bija nepieciešami 18 mēneši, lai radītu strādājošu versiju. Toties atklātībā primo reizi tā tika laista 1994. gadā, bet 1995. gadā kļuva plašāk pazīstama pēc tam, kad Netscape paziņoja par nodomiem iekļaut tās atbalstu savā Navigator pārlūkprogrammā.
+
+Mērķi[labot šo sadaļu | labot pirmkodu]
+Valodas Java izstrādes galvenie mērķi bija šādi:
+
+tai jābūt objektorientētai valodai
+tai jābūt vairāk vai mazāk neatkarīgai no datora platformas
+tai jāatbalsta tīkli
+tai jāvar droši izpildīt kodu no attālinātiem avotiem
+Sveika, pasaule![labot šo sadaļu | labot pirmkodu]
+public class HelloWorld 
+{
+    public static void main(String[] args) 
+    {
+        System.out.println("Sveika, pasaule!");
+    }
+}
+Atsauces[labot šo sadaļu | labot pirmkodu]
+↑ Java 5.0 added several new language features (the enhanced for loop, autoboxing, varargs and annotations), after they were introduced in the similar (and competing) C# language [1][2]
+↑ «About Microsoft's "Delegates"». Skatīts: 2010-01-11. We looked very carefully at Delphi Object Pascal and built a working prototype of bound method references in order to understand their interaction with the Java programming language and its APIs. [...] Our conclusion was that bound method references are unnecessary and detrimental to the language. This decision was made in consultation with Borland International, who had previous experience with bound method references in Delphi Object Pascal.
+↑ Gosling and McGilton. «The Java Language Environment», May 1996.
+↑ J. Gosling, B. Joy, G. Steele, G. Brachda. «The Java Language Specification, 2nd Edition».
+↑ «The A-Z of Programming Languages: Modula-3 - a-z of programming languages - Computerworld». Arhivēts no oriģināla, laiks: 2009. gada 5. janvārī. Skatīts: 2010. gada 9. jūnijā.
+↑ Patrick Naughton cites Objective-C as a strong influence on the design of the Java programming language, stating that notable direct derivatives include Java interfaces (derived from Objective-C's protocol) and primitive wrapper classes. [3]
+↑ TechMetrix Research. «History of Java». Java Application Servers Report, 1999. Arhivēts no oriģināla, laiks: 2010. gada 29. decembrī. Skatīts: 2009. gada 16. oktobrī. The project went ahead under the name "green" and the language was based on an old model of UCSD Pascal, which makes it possible to generate interpretive code
+↑ A Conversation with James Gosling - ACM Queue
+Ārējās saites[labot šo sadaļu | labot pirmkodu]
+Java lapa Oracle vietnē (angliski)
+
+Aizmetņa ikona	Šis ar informācijas tehnoloģijām saistītais raksts ir nepilnīgs. Jūs varat dot savu ieguldījumu Vikipēdijā, papildinot to.
+Autoritatīvā vadība	
+WorldCat
+LCCN: sh95008574
+GND: 4401313-9
+BNF: cb12533207m (data)
+BNE: XX540033
+Saturs iegūts no "https://lv.wikipedia.org/w/index.php?title=Java_(programmēšanas_valoda)&oldid=3110042"
+Kategorijas:
+Nepabeigti raksti par informācijas tehnoloģijām
+Java (programmēšanas valoda)
+Slēpta kategorija:
+Visi Vikipēdijas aizmetņi
+Navigācijas izvēlne
+Dalībnieka rīki
+Nav pieslēdzies
+Diskusijas
+Devums
+Izveidot jaunu Vikipēdijas kontu
+Ieiet Vikipēdijā
+Vārdtelpas
+Raksts
+Diskusija
+
+Varianti
+Apskates
+Skatīt
+Labot
+Labot pirmkodu
+Hronoloģija
+
+Vairāk
+Meklēt
+Meklēt Vikipēdijā
+  
+Navigācija
+Sākumlapa
+Kopienas portāls
+Aktualitātes
+Pēdējās izmaiņas
+Nejauša lapa
+Palīdzība
+Paziņot par kļūdu
+Ziedojumi
+Kontakti
+Rīki
+Norādes uz šo rakstu
+Saistītās izmaiņas
+Īpašās lapas
+Pastāvīgā saite
+Lapas informācija
+Atsauce uz šo lapu
+Ieraksts Vikidatos
+Drukāt/eksportēt
+Izveidot grāmatu
+Lejupielādēt kā PDF
+Drukājama versija
+Citos projektos
+Vikikrātuve
+Citās valodās
+Acèh
+Afrikaans
+አማርኛ
+Aragonés
+العربية
+مصرى
+অসমীয়া
+Asturianu
+Azərbaycanca
+تۆرکجه
+Žemaitėška
+Беларуская
+Беларуская (тарашкевіца)‎
+Български
+বাংলা
+Bosanski
+ᨅᨔ ᨕᨘᨁᨗ
+Català
+Mìng-dĕ̤ng-ngṳ̄
+کوردی
+Corsu
+Čeština
+Чӑвашла
+Cymraeg
+Dansk
+Deutsch
+Ελληνικά
+English
+Esperanto
+Español
+Eesti
+Euskara
+Estremeñu
+فارسی
+Suomi
+Na Vosa Vakaviti
+Français
+Gaeilge
+Galego
+ગુજરાતી
+客家語/Hak-kâ-ngî
+עברית
+हिन्दी
+Hrvatski
+Kreyòl ayisyen
+Magyar
+Հայերեն
+Interlingua
+Bahasa Indonesia
+Íslenska
+Italiano
+日本語
+ქართული
+Qaraqalpaqsha
+Taqbaylit
+Қазақша
+ಕನ್ನಡ
+한국어
+Kurdî
+Кыргызча
+Latina
+Ligure
+Lumbaart
+Lietuvių
+Minangkabau
+Македонски
+മലയാളം
+Монгол
+मराठी
+Bahasa Melayu
+မြန်မာဘာသာ
+नेपाली
+Nederlands
+Norsk nynorsk
+Norsk bokmål
+Occitan
+ଓଡ଼ିଆ
+ਪੰਜਾਬੀ
+Polski
+پنجابی
+Português
+Română
+Русский
+संस्कृतम्
+Саха тыла
+Scots
+سنڌي
+Srpskohrvatski / српскохрватски
+සිංහල
+Simple English
+Slovenčina
+Slovenščina
+Soomaaliga
+Shqip
+Српски / srpski
+Svenska
+Kiswahili
+தமிழ்
+తెలుగు
+Тоҷикӣ
+ไทย
+Tagalog
+Türkçe
+Татарча/tatarça
+Українська
+اردو
+Oʻzbekcha/ўзбекча
+Vèneto
+Tiếng Việt
+Winaray
+吴语
+中文
+文言
+Bân-lâm-gú
+粵語
+Labot saites
+Šī lapa pēdējoreiz labota: 2019. gada 13. septembris plkst. 19.22.
+Teksts ir pieejams saskaņā ar Creative Commons Attribution/Share-Alike licenci; var pastāvēt papildu ierobežojumi. Plašākai informācijai skatīt lietošanas noteikumus.
+Privātuma politika
+Par Vikipēdiju
+Saistību atrunas
+Mobilais skats
+Izstrādātāji
+Statistika
+Sīkdatņu deklarācija
+Wikimedia Foundation
+Powered by MediaWiki

@@ -1,0 +1,222 @@
+[paslￄﾓpt]
+CEE Spring Logo transparent.svg
+Piedalies starptautiskￄﾁ rakstu konkursￄﾁ ￂﾫ77,112021ￂﾻ
+par Centrￄﾁlￄﾁs un Austrumeiropas valstￄﾫm un saￅﾆem balvas!
+K93,6s norisinￄﾁs no 21. marta lￄﾫdz 31. maijam
+Java (programmￄﾓￅﾡanas valoda)
+Vikipￄﾓdijas lapa
+Jump to navigation 19,8search
+ￅﾠis raksts ir par 99,22u. Par citￄﾁm jￄﾓdziena Java nozￄﾫmￄﾓm skatￄﾫt18,7ju atdalￄﾫ174,7lapu.
+Java210,7logo401,7aradigma	Objektorientￄﾓta, struktur14,6imperatￄﾫva
+Izveidota	1995
+Autors	Sun Microsystems
+Paￅﾡreizￄﾓjￄﾁ versija	345,7Standard Edition 7 (1.7.0_51)
+
+(2014-01-14; 7 gadi)
+Galvenￄﾁs implementￄﾁcijas	Vairￄﾁkas
+Dialekti	Generic Java, Pizza
+Ietekmￄﾓjusies no	Ada 83, C++, C#,[1] Delphi Object Pascal,[2] Eiffel,[3] 95,14Mesa,[4] Modula-3,[5] 65,6ive-C,[6] UCSD79,97][8] Smalltalk156,14	Ada 2005, C#, Clojure, D, ECMAScript, Groovy, J#, PHP, Scala, Java36,8Python, BeanShell
+OS306,8platformu
+Licence	GNU Vispￄﾁrￄﾓjￄﾁ publiskￄﾁ licence / Java kopienas process
+Tￄﾫmekￄﾼa vietne	www.oracle.com/java/863,7ir firmas 575,16 izstrￄﾁdￄﾁta o673,15820,23a. Valoda, kuras sￄﾁkotnￄﾓjais nosaukums bija Oak, tika veidota kￄﾁ C++ aizstￄﾁjￄﾓja, lai gan tￄﾁs funkcionalitￄﾁte ir tuvￄﾁka491,10 C.
+
+Satura rￄﾁdￄﾫtￄﾁjs
+1 Vￄﾓsture
+2 Mￄﾓrￄﾷi
+3 Sveika, pasaule!
+4 Atsauces
+5 ￄﾀrￄﾓjￄﾁs saites
+73,8[labot ￅﾡo sadaￄﾼu | labot pirmkodu]
+Valodu 1991. gadￄﾁ 355,10ja Dￅﾾeimss Goslings (James 16,7), Patriks Noutons (Patrick Naughton), Kriss Varts (Chris Warth), Eds Franks (Ed11,6) un Maiks ￅﾠeridans (Mike Sheridan) no kompￄﾁnijas 1130,16, kￄﾁ daￄﾼu no Zaￄﾼￄﾁ projekta (Green16,6ct). Bija nepiecieￅﾡami 18 mￄﾓneￅﾡi, lai radￄﾫtu 289,9oￅﾡu versiju. Toties atklￄﾁtￄﾫbￄﾁ primo reizi tￄﾁ tika laista 1994374,7, bet 1995391,8kￄﾼuva plaￅﾡￄﾁk pazￄﾫstama pￄﾓc tam, kad Netscape paziￅﾆoja par nodomiem iekￄﾼaut tￄﾁs atbalstu savￄﾁ Navigator pￄﾁrlￅﾫkp1755,8ﾁ.
+
+652,7590,43as Java i939,7es galvenie mￄﾓrￄﾷi bija ￅﾡￄﾁdi:
+
+tai jￄﾁbￅﾫt 982,16i valodai
+39,12vairￄﾁk vai mazￄﾁk neatkarￄﾫgai no datora platformas
+105,7262,7a tￄﾫkl90,10var droￅﾡi izpildￄﾫt kodu no attￄﾁlinￄﾁtiem avotiem
+932,16890,38public class HelloWorld 
+{
+    public static void main(String[] args) 45,652,7    System.out.println("1095,16");
+    }
+}
+Atsauces1076,38￢ﾆﾑ Java 5.0 added several new language features (the enhanced for loop, autoboxing, varargs and annotations), after they were introduced in the similar (and competing) C#141,10[1][2]
+￢ﾆﾑ ￂﾫAbout Microsoft's "Delegates"ￂﾻ. Skatￄﾫts: 2010-01-11. We looked very carefully at2074,21 and built a working prototype of bound method references in order to understand their interaction with the Java 2712,8ing 392,9and its APIs. [...] Our conclusion was that 144,24are unnecessary and detrimental to the 508,8. This deci96,9made in consultation with Borland International, who had previous experience with 317,272472,20.
+￢ﾆﾑ Gosling and McGilton. ￂﾫTh325,7L705,8Environmentￂﾻ, May 199672,7J. Gosling, B. Joy, G. Steele, G. Brachda. 93,20Specification, 2nd Editionￂﾻ.680,8The A-Z of P475,11162,8s: 2646,8 - a-z of 516,20s - Computerworldￂﾻ. Arhivￄﾓts no oriￄﾣinￄﾁla, laiks: 2009. gada 5. janvￄﾁrￄﾫ798,1635,79. jￅﾫnijￄﾁ.
+￢ﾆﾑ 2057,16 cites 2812,11 as a strong influence on the design of 737,29, stating that notable direct derivatives include Java interfaces (derived from 2972,11's protocol) and primitive wrapper classes. [3]
+￢ﾆﾑ TechMetrix Research. ￂﾫHistory of Javaￂﾻ. Java Application Servers Report, 1999. 425,35390,929. decemb426,170461,816. okto35,6The project went ahead under the name "green" and 1002,12 was based on an old model of 3298,12 which makes it possible to generate interpretive code
+￢ﾆﾑ A Convers1169,112799,13 - ACM Queue
+2968,162974,38Java lapa Oracle vietnￄﾓ (angliski)
+
+Aizmetￅﾆa ikona	ￅﾠis ar informￄﾁcijas tehnoloￄﾣijￄﾁm saistￄﾫtais 4332,10nepilnￄﾫgs. Jￅﾫs varat dot savu ieguldￄﾫjumu Vikipￄﾓdijￄﾁ, papildinot to.
+Autoritatￄﾫvￄﾁ vadￄﾫba	
+WorldCat
+LCCN: sh95008574
+GND: 4401313-9
+BNF: cb12533207m (data)
+BNE: XX540033
+Saturs iegￅﾫts no "https://lv.wikipedia.org/w/index.php?title=Java_(4028,16_valoda)&oldid=3110042"
+Kategorijas:
+Nepabeigti raksti par 997,28
+Java 754,17 valoda)
+Slￄﾓpta k775,9:
+Visi 1059,10as aizmetￅﾆi
+Navig1205,8izvￄﾓlne
+Dalￄﾫbnieka rￄﾫki
+Nav pieslￄﾓdzies
+Diskusijas
+Devums
+Izveidot jaun1297,12as kontu
+Ieiet1351,13
+Vￄﾁrdtelpas
+Raksts962,11
+
+Varianti
+Apskates
+Skatￄﾫt
+Labot
+Labo4525,10
+Hronoloￄﾣija
+
+Vairￄﾁk
+Meklￄﾓt971,81120,16  1274,13
+Sￄﾁkumlapa
+K5131,9ortￄﾁls
+Aktualitￄﾁtes
+Pￄﾓdￄﾓjￄﾁs izmaiￅﾆas
+Nejauￅﾡa lapa
+Palￄﾫdzￄﾫba
+Paziￅﾆot par kￄﾼￅﾫdu
+Ziedojumi
+Kontakti
+Rￄﾫki
+Norￄﾁdes uz ￅﾡo rakstu
+Saistￄﾫt1313,15ￄﾪpaￅﾡￄﾁs lapas
+Pastￄﾁvￄﾫgￄﾁ saite
+Lapas2265,134149,91363,8lapu
+Ieraksts Vikidatos
+Drukￄﾁt/eksportￄﾓt
+1840,9grￄﾁmatu
+Lejupielￄﾁdￄﾓt kￄﾁ PDF1418,8jama versija
+Citos5199,8os
+Vikikrￄﾁtuve
+Citￄﾁs valodￄﾁs
+Acￃﾨh
+Afrikaans
+￡ﾊﾠ￡ﾈﾛ￡ﾈﾭ￡ﾊﾛ
+Aragonￃﾩs
+￘ﾧ￙ﾄ￘ﾹ￘ﾱ￘ﾨ￙ﾊ￘ﾩ
+￙ﾅ￘ﾵ￘ﾱ￙ﾉ
+￠ﾦﾅ￠ﾦﾸ￠ﾦﾮ￠ﾧﾀ￠ﾦﾯ￠ﾦﾼ￠ﾦﾾ
+Asturianu
+Az￉ﾙrbaycanca
+￘ﾪￛﾆ￘ﾱￚﾩ￘ﾬ￙ﾇ
+ￅﾽemaitￄﾗￅﾡka
+￐ﾑ￐ﾵ￐ﾻ￐ﾰ￑ﾀ￑ﾃ￑ﾁ￐ﾺ￐ﾰ￑ﾏ1627,21ﾏ (￑ﾂ￐ﾰ￑ﾀ￐ﾰ￑ﾈ￐ﾺ￐ﾵ￐ﾲ￑ﾖ￑ﾆ￐ﾰ)￢ﾀﾎ
+￐ﾑ￑ﾊ￐ﾻ￐ﾳ￐ﾰ￑ﾀ￑ﾁ￐ﾺ￐ﾸ
+￠ﾦﾬ￠ﾦﾾ￠ﾦﾂ￠ﾦﾲ￠ﾦﾾ
+Bosanski
+￡ﾨﾅ￡ﾨﾔ ￡ﾨﾕ￡ﾨﾘ￡ﾨﾁ￡ﾨﾗ
+Catalￃﾠ
+Mￃﾬng-dￄﾕￌﾤng-ng￡ﾹﾳￌﾄ
+ￚﾩ￙ﾈ￘ﾱ￘ﾯￛﾌ
+Corsu
+ￄﾌeￅﾡtina
+￐ﾧￓﾑ￐ﾲ￐ﾰ￑ﾈ￐ﾻ￐ﾰ
+Cymraeg
+Dansk
+Deutsch
+ￎﾕￎﾻￎﾻￎﾷￎﾽￎﾹￎﾺￎﾬ
+English
+Esperanto
+Espaￃﾱol
+Eesti
+Euskara
+Estremeￃﾱu
+￙ﾁ￘ﾧ￘ﾱ￘ﾳￛﾌ
+Suomi
+Na Vosa Vakaviti
+Franￃﾧais
+Gaeilge
+Galego
+￠ﾪﾗ￠ﾫﾁ￠ﾪﾜ￠ﾪﾰ￠ﾪﾾ￠ﾪﾤ￠ﾫﾀ
+￥ﾮﾢ￥ﾮﾶ￨ﾪﾞ/Hak-kￃﾢ-ngￃﾮ
+ￗﾢￗﾑￗﾨￗﾙￗﾪ
+￠ﾤﾹ￠ﾤ﾿￠ﾤﾨ￠ﾥﾍ￠ﾤﾦ￠ﾥﾀ
+Hrvatski
+Kreyￃﾲl ayisyen
+Magyar
+ￕﾀￕﾡￕﾵￕﾥￖﾀￕﾥￕﾶ
+Interlingua
+Bahasa Indonesia
+ￃﾍslenska
+Italiano
+￦ﾗﾥ￦ﾜﾬ￨ﾪﾞ
+￡ﾃﾥ￡ﾃﾐ￡ﾃﾠ￡ﾃﾗ￡ﾃﾣ￡ﾃﾚ￡ﾃﾘ
+Qaraqalpaqsha
+Taqbaylit
+ￒﾚ￐ﾰ￐ﾷ￐ﾰￒﾛ￑ﾈ￐ﾰ
+￠ﾲﾕ￠ﾲﾨ￠ﾳﾍ￠ﾲﾨ￠ﾲﾡ
+￭ﾕﾜ￪ﾵﾭ￬ﾖﾴ
+Kurdￃﾮ
+￐ﾚ￑ﾋ￑ﾀ￐ﾳ￑ﾋ￐ﾷ￑ﾇ￐ﾰ
+Latina
+Ligure
+Lumbaart
+Lietuviￅﾳ
+Minangkabau
+￐ﾜ￐ﾰ￐ﾺ￐ﾵ￐ﾴ￐ﾾ￐ﾽ3009,9ﾴﾮ￠ﾴﾲ￠ﾴﾯ￠ﾴﾾ￠ﾴﾳ￠ﾴﾂ
+￐ﾜ￐ﾾ￐ﾽ￐ﾳ￐ﾾ￐ﾻ
+￠ﾤﾮ￠ﾤﾰ￠ﾤﾾ￠ﾤﾠ￠ﾥﾀ
+Bahasa Melayu
+￡ﾀﾙ￡ﾀﾼ￡ﾀﾔ￡ﾀﾺ￡ﾀﾙ￡ﾀﾬ￡ﾀﾘ￡ﾀﾬ￡ﾀﾞ￡ﾀﾬ
+￠ﾤﾨ￠ﾥﾇ￠ﾤﾪ￠ﾤﾾ￠ﾤﾲ￠ﾥﾀ
+Nederlands
+Norsk nynorsk2498,8bokmￃﾥl
+Occitan
+￠ﾬﾓ￠ﾬﾡ￠ﾬﾼ￠ﾬ﾿￠ﾬﾆ
+￠ﾨﾪ￠ﾩﾰ￠ﾨﾜ￠ﾨﾾ￠ﾨﾬ￠ﾩﾀ
+Polski
+￙ﾾ￙ﾆ￘ﾬ￘ﾧ￘ﾨￛﾌ
+Portuguￃﾪs
+Romￃﾢnￄﾃ
+￐ﾠ￑ﾃ￑ﾁ￑ﾁ￐ﾺ￐ﾸ￐ﾹ
+￠ﾤﾸ￠ﾤﾂ￠ﾤﾸ￠ﾥﾍ￠ﾤﾕ￠ﾥﾃ￠ﾤﾤ￠ﾤﾮ￠ﾥﾍ
+￐ﾡ￐ﾰ￑ﾅ￐ﾰ ￑ﾂ￑ﾋ￐ﾻ￐ﾰ
+Scots
+￘ﾳ￙ﾆￚﾌ￙ﾊ
+Srpskohrvatski / ￑ﾁ￑ﾀ￐﾿￑ﾁ￐ﾺ￐ﾾ￑ﾅ￑ﾀ￐ﾲ￐ﾰ￑ﾂ￑3765,8ﾷﾃ￠ﾷﾒ￠ﾶﾂ￠ﾷﾄ￠ﾶﾽ
+Simple 3652,9Slovenￄﾍina
+Slovenￅﾡￄﾍina
+Soomaaliga
+Shqip
+￐ﾡ2911,9ﾸ / srpski
+Svenska
+Kiswahili
+￠ﾮﾤ￠ﾮﾮ￠ﾮ﾿￠ﾮﾴ￠ﾯﾍ
+￠ﾰﾤ￠ﾱﾆ￠ﾰﾲ￠ﾱﾁ￠ﾰﾗ￠ﾱﾁ
+￐ﾢ￐ﾾￒﾷ￐ﾸ￐ﾺￓﾣ
+￠ﾹﾄ￠ﾸﾗ￠ﾸﾢ
+Tagalog
+Tￃﾼrkￃﾧe
+￐ﾢ￐ﾰ￑ﾂ￐ﾰ￑ﾀ￑ﾇ￐ﾰ/tatarￃﾧa
+￐ﾣ￐ﾺ￑ﾀ￐ﾰ￑ﾗ￐ﾽ￑ﾁ￑ﾌ￐ﾺ￐ﾰ
+￘ﾧ￘ﾱ￘ﾯ￙ﾈ
+Oￊﾻzbekcha/￑ﾞ￐ﾷ￐ﾱ￐ﾵ￐ﾺ￑ﾇ￐ﾰ
+Vￃﾨneto
+Ti￡ﾺ﾿ng Vi￡ﾻﾇt
+Winaray
+￥ﾐﾴ￨ﾯﾭ
+￤ﾸﾭ￦ﾖﾇ
+￦ﾖﾇ￨ﾨﾀ
+Bￃﾢn-lￃﾢm-gￃﾺ
+￧ﾲﾵ￨ﾪﾞ
+Labot saites
+ￅﾠￄﾫ lapa pￄﾓdￄﾓjoreiz labota: 2016404,93. septembris plkst. 19.22.
+Te6090,8pieejams saskaￅﾆￄﾁ ar Creative Commons Attribution/Share-Alike licenci; var pastￄﾁvￄﾓt papildu ierobeￅﾾojumi. Plaￅﾡￄﾁkai 6395,12i skatￄﾫt lietoￅﾡanas noteikumus.
+Privￄﾁtuma politika
+Par 6441,105604,10bu atrunas
+Mobilais skats
+Izstrￄﾁdￄﾁtￄﾁji
+Statistika
+Sￄﾫkdatￅﾆu deklar5945,8Wikimedia Foundation
+Powered by MediaWiki
