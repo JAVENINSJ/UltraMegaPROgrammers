@@ -77,15 +77,18 @@ class Compressor {
 	
 	private static FileManipulator fm = new FileManipulator();
 	
-	public class LZSS {
+	private class LZSS {
 		
 		final int SLIDING_WINDOW_SIZE = 4096;
 		final byte START_OF_TOKEN = 2;
 		final byte END_OF_TOKEN = 3;
+		LZSS(){}
 		
-		private LZSS(){}
+		private String decode(String input) {
+			return decode(input.getBytes());
+		}
 				
-		protected String decode(byte[] input) {
+		private String decode(byte[] input) {
 			
 			boolean inToken = false, scanningOffset = true;
 			
@@ -155,8 +158,12 @@ class Compressor {
 			return -1;
 		}
 		
+		private String encode(String input) {
+			return encode(input.getBytes());
+		}
+		
 		private String encode(byte[] input) {
-
+			
 			List<Byte> searchBuffer = new ArrayList<Byte>();
 			ArrayList<Byte> checkedChars = new ArrayList<Byte>();
 			ArrayList<Byte> checkedCharsPlusCurr = new ArrayList<Byte>();
@@ -180,12 +187,12 @@ class Compressor {
 						index = elementsInArray(checkedChars, searchBuffer);
 						offset = i - index - checkedChars.size();
 						length = checkedChars.size();
+						
 						token = String.format("%c%d,%d%c",
 								START_OF_TOKEN,
 								offset,
 								length,
 								END_OF_TOKEN);
-						
 						if(token.length() > length) {
 							output.addAll(checkedChars);
 						}else {
@@ -215,11 +222,13 @@ class Compressor {
 			for(Byte bt: output) {
 				sb.append((char) bt.byteValue());
 			}
+
+			sb.append((char) input[input.length-1]);
 			
 			return sb.toString();
 		}
-	
-	}
+		
+ 	}
 	
 	public void compressFile(String filePath, String archivePath) {
 		LZSS lzss = this.new LZSS();
