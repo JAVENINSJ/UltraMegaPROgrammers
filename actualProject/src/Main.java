@@ -84,19 +84,22 @@ class Compressor {
 
 	private static FileManipulator fm = new FileManipulator();
 
-	public class LZSS {
+	private class LZSS {
 
 		final int SLIDING_WINDOW_SIZE = 4096;
 		final byte START_OF_TOKEN = 2;
 		final byte END_OF_TOKEN = 3;
 
-		private LZSS() {
+		LZSS() {
 		}
 
-		protected String decode(byte[] input) {
+		private String decode(String input) {
+			return decode(input.getBytes());
+		}
 
-			boolean inToken = false, scanningOffset = true;
+		private String decode(byte[] input) {
 
+			boolean inToken = false, scanningLength = true;
 			ArrayList<Byte> length = new ArrayList<Byte>();
 			ArrayList<Byte> offset = new ArrayList<Byte>();
 
@@ -107,9 +110,10 @@ class Compressor {
 			for (Byte ch : input) {
 				if (ch.byteValue() == START_OF_TOKEN) {
 					inToken = true;
-					scanningOffset = true;
+
+					scanningLength = true;
 				} else if ((char) ch.byteValue() == ',' && inToken) {
-					scanningOffset = false;
+					scanningLength = false;
 				} else if (ch.byteValue() == END_OF_TOKEN) {
 					inToken = false;
 
@@ -121,11 +125,12 @@ class Compressor {
 
 					length = new ArrayList<Byte>();
 					offset = new ArrayList<Byte>();
+
 				} else if (inToken) {
-					if (scanningOffset) {
-						offset.add(ch);
-					} else {
+					if (scanningLength) {
 						length.add(ch);
+					} else {
+						offset.add(ch);
 					}
 				} else {
 					output.add(ch.byteValue());
@@ -166,6 +171,10 @@ class Compressor {
 			return -1;
 		}
 
+		private String encode(String input) {
+			return encode(input.getBytes());
+		}
+
 		private String encode(byte[] input) {
 
 			List<Byte> searchBuffer = new ArrayList<Byte>();
@@ -190,8 +199,8 @@ class Compressor {
 						index = elementsInArray(checkedChars, searchBuffer);
 						offset = i - index - checkedChars.size();
 						length = checkedChars.size();
-						token = String.format("%c%d,%d%c", START_OF_TOKEN, offset, length, END_OF_TOKEN);
 
+						token = String.format("%c%d,%d%c", START_OF_TOKEN, length, offset, END_OF_TOKEN);
 						if (token.length() > length) {
 							output.addAll(checkedChars);
 						} else {
@@ -229,21 +238,75 @@ class Compressor {
 
 	public class Huffman {
 		static int[] frequencyCounter(byte[] byteArray) {
-			int[] llFrequencies = new int[286]; // 0-285 simboli hz vai vajag EOB
-			int[] distFrequencies = new int[30]; // 0-29 hz kāpēc saka ka 0-31
+			int[] llFrequencies = new int[286];
+			int[] distFrequencies = new int[30];
 			int distance, length, j = 0;
 			String distanceStr, lengthStr;
 			for (int i = 0; i < byteArray.length; i++) {
-				if (byteArray[i] == 2) { // 2 sākums 44 komats 3 beigas
-					System.out.println(i);
+				if (byteArray[i] == 2) {
 					j = 0;
 					while (byteArray[i] != 44) {
 						i++;
 						j++;
 					}
 					j -= 1;
-					System.out.println(i);
-					System.out.println(j);
+					byte[] lengthCache = new byte[j];
+					for (int k = 0; k < j; k++) {
+						lengthCache[k] = byteArray[i - j + k];
+					}
+					lengthStr = new String(lengthCache, StandardCharsets.UTF_8);
+					length = Integer.parseInt(lengthStr);
+					if (length < 11) {
+						llFrequencies[255 + length - 1] += 1;
+					} else if (length < 13) {
+						llFrequencies[265] += 1;
+					} else if (length < 15) {
+						llFrequencies[266] += 1;
+					} else if (length < 17) {
+						llFrequencies[267] += 1;
+					} else if (length < 19) {
+						llFrequencies[268] += 1;
+					} else if (length < 23) {
+						llFrequencies[269] += 1;
+					} else if (length < 27) {
+						llFrequencies[270] += 1;
+					} else if (length < 31) {
+						llFrequencies[271] += 1;
+					} else if (length < 35) {
+						llFrequencies[272] += 1;
+					} else if (length < 43) {
+						llFrequencies[273] += 1;
+					} else if (length < 51) {
+						llFrequencies[274] += 1;
+					} else if (length < 59) {
+						llFrequencies[275] += 1;
+					} else if (length < 67) {
+						llFrequencies[276] += 1;
+					} else if (length < 83) {
+						llFrequencies[277] += 1;
+					} else if (length < 99) {
+						llFrequencies[278] += 1;
+					} else if (length < 115) {
+						llFrequencies[279] += 1;
+					} else if (length < 131) {
+						llFrequencies[280] += 1;
+					} else if (length < 163) {
+						llFrequencies[281] += 1;
+					} else if (length < 195) {
+						llFrequencies[282] += 1;
+					} else if (length < 227) {
+						llFrequencies[283] += 1;
+					} else if (length < 258) {
+						llFrequencies[284] += 1;
+					} else if (length == 258) {
+						llFrequencies[285] += 1;
+					}
+					j = 0;
+					while (byteArray[i] != 3) {
+						i++;
+						j++;
+					}
+					j -= 1;
 					byte[] distanceCache = new byte[j];
 					for (int k = 0; k < j; k++) {
 						distanceCache[k] = byteArray[i - j + k];
@@ -305,70 +368,11 @@ class Compressor {
 					} else if (distance >= 24577) {
 						distFrequencies[29] += 1;
 					}
-					j = 0;
-					while (byteArray[i] != 3) {
-						i++;
-						j++;
-					}
-					j -= 1;
-					byte[] lengthCache = new byte[j];
-					for (int k = 0; k < j; k++) {
-						lengthCache[k] = byteArray[i - j + k];
-					}
-					lengthStr = new String(lengthCache, StandardCharsets.UTF_8);
-					length = Integer.parseInt(lengthStr);
-					System.out.println("Length " + length);
-					if (length < 11) {
-						llFrequencies[255 + length - 1] += 1;
-					} else if (length < 13) {
-						llFrequencies[265] += 1;
-					} else if (length < 15) {
-						llFrequencies[266] += 1;
-					} else if (length < 17) {
-						llFrequencies[267] += 1;
-					} else if (length < 19) {
-						llFrequencies[268] += 1;
-					} else if (length < 23) {
-						llFrequencies[269] += 1;
-					} else if (length < 27) {
-						llFrequencies[270] += 1;
-					} else if (length < 31) {
-						llFrequencies[271] += 1;
-					} else if (length < 35) {
-						llFrequencies[272] += 1;
-					} else if (length < 43) {
-						llFrequencies[273] += 1;
-					} else if (length < 51) {
-						llFrequencies[274] += 1;
-					} else if (length < 59) {
-						llFrequencies[275] += 1;
-					} else if (length < 67) {
-						llFrequencies[276] += 1;
-					} else if (length < 83) {
-						llFrequencies[277] += 1;
-					} else if (length < 99) {
-						llFrequencies[278] += 1;
-					} else if (length < 115) {
-						llFrequencies[279] += 1;
-					} else if (length < 131) {
-						llFrequencies[280] += 1;
-					} else if (length < 163) {
-						llFrequencies[281] += 1;
-					} else if (length < 195) {
-						llFrequencies[282] += 1;
-					} else if (length < 227) {
-						llFrequencies[283] += 1;
-					} else if (length < 258) {
-						llFrequencies[284] += 1;
-					} else if (length == 258) {
-						llFrequencies[285] += 1;
-					}
-					i++;
 				} else {
 					llFrequencies[Byte.toUnsignedInt(byteArray[i])] += 1;
 				}
 			}
-			return llFrequencies; // kā atgriezt abus masīvus?
+			return llFrequencies;
 		}
 
 		static String bitStreamMaker(byte[] byteArray) {
@@ -389,13 +393,7 @@ class Compressor {
 			for (int i = 0; i <= 31; i++) {
 				distancePrefixCodes[i] = String.format("%5s", Integer.toBinaryString(i)).replace(" ", "0");
 			}
-			for (int i = 0; i < llPrefixCodes.length; i++) {
-				System.out.println(llPrefixCodes[i]);
-			}
-			for (int i = 0; i < distancePrefixCodes.length; i++) {
-				System.out.println(distancePrefixCodes[i]);
-			}
-			String bitSequence = "";
+			StringBuilder bitSequenceStr = new StringBuilder();
 			int[] llFrequencies = new int[286];
 			int[] distFrequencies = new int[30];
 			int distance, length, j = 0;
@@ -408,68 +406,96 @@ class Compressor {
 						j++;
 					}
 					j -= 1;
-					System.out.println(i);
-					System.out.println(j);
-					byte[] distanceCache = new byte[j];
+					byte[] lengthCache = new byte[j];
 					for (int k = 0; k < j; k++) {
-						distanceCache[k] = byteArray[i - j + k];
+						lengthCache[k] = byteArray[i - j + k];
 					}
-					distanceStr = new String(distanceCache, StandardCharsets.UTF_8);
-					distance = Integer.parseInt(distanceStr);
-					if (distance < 5) {
-						distFrequencies[distance - 1] += 1;
-					} else if (distance < 7) {
-						distFrequencies[4] += 1;
-					} else if (distance < 9) {
-						distFrequencies[5] += 1;
-					} else if (distance < 13) {
-						distFrequencies[6] += 1;
-					} else if (distance < 17) {
-						distFrequencies[7] += 1;
-					} else if (distance < 25) {
-						distFrequencies[8] += 1;
-					} else if (distance < 33) {
-						distFrequencies[9] += 1;
-					} else if (distance < 49) {
-						distFrequencies[10] += 1;
-					} else if (distance < 65) {
-						distFrequencies[11] += 1;
-					} else if (distance < 97) {
-						distFrequencies[12] += 1;
-					} else if (distance < 129) {
-						distFrequencies[13] += 1;
-					} else if (distance < 193) {
-						distFrequencies[14] += 1;
-					} else if (distance < 257) {
-						distFrequencies[15] += 1;
-					} else if (distance < 385) {
-						distFrequencies[16] += 1;
-					} else if (distance < 513) {
-						distFrequencies[17] += 1;
-					} else if (distance < 769) {
-						distFrequencies[18] += 1;
-					} else if (distance < 1025) {
-						distFrequencies[19] += 1;
-					} else if (distance < 1537) {
-						distFrequencies[20] += 1;
-					} else if (distance < 2049) {
-						distFrequencies[21] += 1;
-					} else if (distance < 3073) {
-						distFrequencies[22] += 1;
-					} else if (distance < 4097) {
-						distFrequencies[23] += 1;
-					} else if (distance < 6145) {
-						distFrequencies[24] += 1;
-					} else if (distance < 8193) {
-						distFrequencies[25] += 1;
-					} else if (distance < 12289) {
-						distFrequencies[26] += 1;
-					} else if (distance < 16385) {
-						distFrequencies[27] += 1;
-					} else if (distance < 24577) {
-						distFrequencies[28] += 1;
-					} else if (distance >= 24577) {
-						distFrequencies[29] += 1;
+					lengthStr = new String(lengthCache, StandardCharsets.UTF_8);
+					length = Integer.parseInt(lengthStr);
+					if (length < 11) {
+						bitSequenceStr.append(llPrefixCodes[254 + length]);
+					} else if (length < 13) {
+						bitSequenceStr.append(llPrefixCodes[265]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(length - 11)).replace(" ", "0"));
+					} else if (length < 15) {
+						bitSequenceStr.append(llPrefixCodes[266]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(length - 13)).replace(" ", "0"));
+					} else if (length < 17) {
+						bitSequenceStr.append(llPrefixCodes[267]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(length - 15)).replace(" ", "0"));
+					} else if (length < 19) {
+						bitSequenceStr.append(llPrefixCodes[268]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(length - 17)).replace(" ", "0"));
+					} else if (length < 23) {
+						bitSequenceStr.append(llPrefixCodes[269]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(length - 19)).replace(" ", "0"));
+					} else if (length < 27) {
+						bitSequenceStr.append(llPrefixCodes[270]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(length - 23)).replace(" ", "0"));
+					} else if (length < 31) {
+						bitSequenceStr.append(llPrefixCodes[271]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(length - 27)).replace(" ", "0"));
+					} else if (length < 35) {
+						bitSequenceStr.append(llPrefixCodes[272]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(length - 31)).replace(" ", "0"));
+					} else if (length < 43) {
+						bitSequenceStr.append(llPrefixCodes[273]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(length - 35)).replace(" ", "0"));
+					} else if (length < 51) {
+						bitSequenceStr.append(llPrefixCodes[274]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(length - 43)).replace(" ", "0"));
+					} else if (length < 59) {
+						bitSequenceStr.append(llPrefixCodes[275]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(length - 51)).replace(" ", "0"));
+					} else if (length < 67) {
+						bitSequenceStr.append(llPrefixCodes[276]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(length - 59)).replace(" ", "0"));
+					} else if (length < 83) {
+						bitSequenceStr.append(llPrefixCodes[277]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(length - 67)).replace(" ", "0"));
+					} else if (length < 99) {
+						bitSequenceStr.append(llPrefixCodes[278]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(length - 83)).replace(" ", "0"));
+					} else if (length < 115) {
+						bitSequenceStr.append(llPrefixCodes[279]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(length - 99)).replace(" ", "0"));
+					} else if (length < 131) {
+						bitSequenceStr.append(llPrefixCodes[280]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(length - 115)).replace(" ", "0"));
+					} else if (length < 163) {
+						bitSequenceStr.append(llPrefixCodes[281]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(length - 131)).replace(" ", "0"));
+					} else if (length < 195) {
+						bitSequenceStr.append(llPrefixCodes[282]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(length - 163)).replace(" ", "0"));
+					} else if (length < 227) {
+						bitSequenceStr.append(llPrefixCodes[283]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(length - 195)).replace(" ", "0"));
+					} else if (length < 258) {
+						bitSequenceStr.append(llPrefixCodes[284]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(length - 227)).replace(" ", "0"));
+					} else if (length == 258) {
+						bitSequenceStr.append(distancePrefixCodes[285]);
 					}
 					j = 0;
 					while (byteArray[i] != 3) {
@@ -477,70 +503,130 @@ class Compressor {
 						j++;
 					}
 					j -= 1;
-					byte[] lengthCache = new byte[j];
+					byte[] distanceCache = new byte[j];
 					for (int k = 0; k < j; k++) {
-						lengthCache[k] = byteArray[i - j + k];
+						distanceCache[k] = byteArray[i - j + k];
 					}
-					lengthStr = new String(lengthCache, StandardCharsets.UTF_8);
-					length = Integer.parseInt(lengthStr);
-					System.out.println("Length " + length);
-					if (length < 11) {
-						llFrequencies[255 + length - 1] += 1;
-					} else if (length < 13) {
-						llFrequencies[265] += 1;
-					} else if (length < 15) {
-						llFrequencies[266] += 1;
-					} else if (length < 17) {
-						llFrequencies[267] += 1;
-					} else if (length < 19) {
-						llFrequencies[268] += 1;
-					} else if (length < 23) {
-						llFrequencies[269] += 1;
-					} else if (length < 27) {
-						llFrequencies[270] += 1;
-					} else if (length < 31) {
-						llFrequencies[271] += 1;
-					} else if (length < 35) {
-						llFrequencies[272] += 1;
-					} else if (length < 43) {
-						llFrequencies[273] += 1;
-					} else if (length < 51) {
-						llFrequencies[274] += 1;
-					} else if (length < 59) {
-						llFrequencies[275] += 1;
-					} else if (length < 67) {
-						llFrequencies[276] += 1;
-					} else if (length < 83) {
-						llFrequencies[277] += 1;
-					} else if (length < 99) {
-						llFrequencies[278] += 1;
-					} else if (length < 115) {
-						llFrequencies[279] += 1;
-					} else if (length < 131) {
-						llFrequencies[280] += 1;
-					} else if (length < 163) {
-						llFrequencies[281] += 1;
-					} else if (length < 195) {
-						llFrequencies[282] += 1;
-					} else if (length < 227) {
-						llFrequencies[283] += 1;
-					} else if (length < 258) {
-						llFrequencies[284] += 1;
-					} else if (length == 258) {
-						llFrequencies[285] += 1;
+					distanceStr = new String(distanceCache, StandardCharsets.UTF_8);
+					distance = Integer.parseInt(distanceStr);
+					if (distance < 5) {
+						bitSequenceStr.append(distancePrefixCodes[distance - 1]);
+					} else if (distance < 7) {
+						bitSequenceStr.append(distancePrefixCodes[4]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(distance - 5)).replace(" ", "0"));
+					} else if (distance < 9) {
+						bitSequenceStr.append(distancePrefixCodes[5]);
+						bitSequenceStr
+								.append(String.format("%1s", Integer.toBinaryString(distance - 7)).replace(" ", "0"));
+					} else if (distance < 13) {
+						bitSequenceStr.append(distancePrefixCodes[6]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(distance - 9)).replace(" ", "0"));
+					} else if (distance < 17) {
+						bitSequenceStr.append(distancePrefixCodes[7]);
+						bitSequenceStr
+								.append(String.format("%2s", Integer.toBinaryString(distance - 13)).replace(" ", "0"));
+					} else if (distance < 25) {
+						bitSequenceStr.append(distancePrefixCodes[8]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(distance - 17)).replace(" ", "0"));
+					} else if (distance < 33) {
+						bitSequenceStr.append(distancePrefixCodes[9]);
+						bitSequenceStr
+								.append(String.format("%3s", Integer.toBinaryString(distance - 25)).replace(" ", "0"));
+					} else if (distance < 49) {
+						bitSequenceStr.append(distancePrefixCodes[10]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(distance - 33)).replace(" ", "0"));
+					} else if (distance < 65) {
+						bitSequenceStr.append(distancePrefixCodes[11]);
+						bitSequenceStr
+								.append(String.format("%4s", Integer.toBinaryString(distance - 49)).replace(" ", "0"));
+					} else if (distance < 97) {
+						bitSequenceStr.append(distancePrefixCodes[12]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(distance - 65)).replace(" ", "0"));
+					} else if (distance < 129) {
+						bitSequenceStr.append(distancePrefixCodes[13]);
+						bitSequenceStr
+								.append(String.format("%5s", Integer.toBinaryString(distance - 97)).replace(" ", "0"));
+					} else if (distance < 193) {
+						bitSequenceStr.append(distancePrefixCodes[14]);
+						bitSequenceStr
+								.append(String.format("%6s", Integer.toBinaryString(distance - 129)).replace(" ", "0"));
+					} else if (distance < 257) {
+						bitSequenceStr.append(distancePrefixCodes[15]);
+						bitSequenceStr
+								.append(String.format("%6s", Integer.toBinaryString(distance - 193)).replace(" ", "0"));
+					} else if (distance < 385) {
+						bitSequenceStr.append(distancePrefixCodes[16]);
+						bitSequenceStr
+								.append(String.format("%7s", Integer.toBinaryString(distance - 257)).replace(" ", "0"));
+					} else if (distance < 513) {
+						bitSequenceStr.append(distancePrefixCodes[17]);
+						bitSequenceStr
+								.append(String.format("%7s", Integer.toBinaryString(distance - 385)).replace(" ", "0"));
+					} else if (distance < 769) {
+						bitSequenceStr.append(distancePrefixCodes[18]);
+						bitSequenceStr
+								.append(String.format("%8s", Integer.toBinaryString(distance - 513)).replace(" ", "0"));
+					} else if (distance < 1025) {
+						bitSequenceStr.append(distancePrefixCodes[19]);
+						bitSequenceStr
+								.append(String.format("%8s", Integer.toBinaryString(distance - 769)).replace(" ", "0"));
+					} else if (distance < 1537) {
+						bitSequenceStr.append(distancePrefixCodes[20]);
+						bitSequenceStr.append(
+								String.format("%9s", Integer.toBinaryString(distance - 1025)).replace(" ", "0"));
+					} else if (distance < 2049) {
+						bitSequenceStr.append(distancePrefixCodes[21]);
+						bitSequenceStr.append(
+								String.format("%9s", Integer.toBinaryString(distance - 1537)).replace(" ", "0"));
+					} else if (distance < 3073) {
+						bitSequenceStr.append(distancePrefixCodes[22]);
+						bitSequenceStr.append(
+								String.format("%10s", Integer.toBinaryString(distance - 2049)).replace(" ", "0"));
+					} else if (distance < 4097) {
+						bitSequenceStr.append(distancePrefixCodes[23]);
+						bitSequenceStr.append(
+								String.format("%10s", Integer.toBinaryString(distance - 3073)).replace(" ", "0"));
+					} else if (distance < 6145) {
+						bitSequenceStr.append(distancePrefixCodes[24]);
+						bitSequenceStr.append(
+								String.format("%11s", Integer.toBinaryString(distance - 4097)).replace(" ", "0"));
+					} else if (distance < 8193) {
+						bitSequenceStr.append(distancePrefixCodes[25]);
+						bitSequenceStr.append(
+								String.format("%11s", Integer.toBinaryString(distance - 6145)).replace(" ", "0"));
+					} else if (distance < 12289) {
+						bitSequenceStr.append(distancePrefixCodes[26]);
+						bitSequenceStr.append(
+								String.format("%12s", Integer.toBinaryString(distance - 8193)).replace(" ", "0"));
+					} else if (distance < 16385) {
+						bitSequenceStr.append(distancePrefixCodes[27]);
+						bitSequenceStr.append(
+								String.format("%12s", Integer.toBinaryString(distance - 12289)).replace(" ", "0"));
+					} else if (distance < 24577) {
+						bitSequenceStr.append(distancePrefixCodes[28]);
+						bitSequenceStr.append(
+								String.format("%13s", Integer.toBinaryString(distance - 16385)).replace(" ", "0"));
+					} else if (distance >= 24577) {
+						bitSequenceStr.append(distancePrefixCodes[29]);
+						bitSequenceStr.append(
+								String.format("%13s", Integer.toBinaryString(distance - 24577)).replace(" ", "0"));
 					}
-					i++;
-
 				} else {
-					bitSequence += llPrefixCodes[Byte.toUnsignedInt(byteArray[i])];
+					bitSequenceStr.append(llPrefixCodes[Byte.toUnsignedInt(byteArray[i])]);
 				}
 			}
-			return bitSequence;
+			// System.out.print(bitSequenceStr);
+			return bitSequenceStr.toString();
 		}
 
 	}
 
-	public String compressFile(String filePath, String archivePath) { // void
+	public String compressFile(String filePath, String archivePath) {
 		LZSS lzss = this.new LZSS();
 		byte[] input = fm.fileToBytes(filePath);
 
@@ -567,49 +653,36 @@ public class Main {
 
 	static Compressor compressor;
 
-	// programmēšana mani padara agresīvu
 	public static void main(String[] args) {
 		compressor = new Compressor();
 		compressor.compressFile("test222.txt", "archive1");
 		String lzss = compressor.compressFile("test222.txt", "archive1");
-		System.out.println(lzss);
+		// System.out.println(lzss);
 
 		String fileName = "archive1";
 		byte[] byteArray = FileManipulator.fileToBytes(fileName);
-		System.out.println(byteArray.length);
+		// System.out.println(byteArray.length);
 		for (int i = 0; i < byteArray.length; i++) {
-			System.out.println(" " + Byte.toUnsignedInt(byteArray[i])); // Byte.toUnsignedInt
+			// System.out.println(" " + Byte.toUnsignedInt(byteArray[i]));
 		}
-		System.out.println();
+		// System.out.println();
 		int frequencies[] = Compressor.Huffman.frequencyCounter(byteArray);
-		System.out.println("frequency");
+		// System.out.println("frequency");
 		for (int i = 0; i < frequencies.length; i++) {
-			System.out.println((char) i + " " + frequencies[i]);
+			// System.out.println((char) i + " " + frequencies[i]);
 		}
 
-		String[] llPrefixCodes = new String[288];
-		String[] distancePrefixCodes = new String[32];
-		for (int i = 48; i <= 191; i++) {
-			llPrefixCodes[i - 48] = String.format("%8s", Integer.toBinaryString(i)).replace(" ", "0");
-		}
-		for (int i = 400; i <= 511; i++) {
-			llPrefixCodes[i - 256] = String.format("%9s", Integer.toBinaryString(i)).replace(" ", "0");
-		}
-		for (int i = 0; i <= 23; i++) {
-			llPrefixCodes[i + 256] = String.format("%7s", Integer.toBinaryString(i)).replace(" ", "0");
-		}
-		for (int i = 384; i <= 391; i++) {
-			llPrefixCodes[i - 104] = String.format("%9s", Integer.toBinaryString(i)).replace(" ", "0");
-		}
-		for (int i = 0; i <= 31; i++) {
-			distancePrefixCodes[i] = String.format("%5s", Integer.toBinaryString(i)).replace(" ", "0");
-		}
-		for (int i = 0; i < llPrefixCodes.length; i++) {
-			System.out.println(llPrefixCodes[i]);
-		}
-		for (int i = 0; i < distancePrefixCodes.length; i++) {
-			System.out.println(distancePrefixCodes[i]);
-		}
+		// System.out.println("Jānis lika");
+		Compressor.Huffman.bitStreamMaker(byteArray);
+		String chuska;
+		chuska = Compressor.Huffman.bitStreamMaker(byteArray);
+		System.out.println(chuska.length()/8);
+		System.out.println(chuska.substring(37500));
+		FileManipulator.bytesToFile(
+				FileManipulator.binStrToBytes(chuska),
+				"archive200"
+			);
+		
 
 		Scanner sc = new Scanner(System.in);
 		compressor = new Compressor();
