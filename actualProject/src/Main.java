@@ -90,7 +90,7 @@ class Compressor {
 				
 		private String decode(byte[] input) {
 			
-			boolean inToken = false, scanningOffset = true;
+			boolean inToken = false, scanningLength = true;
 			
 			ArrayList<Byte> length = new ArrayList<Byte>();
 			ArrayList<Byte> offset = new ArrayList<Byte>();			
@@ -102,9 +102,9 @@ class Compressor {
 			for(Byte ch: input) {
 				if(ch.byteValue() == START_OF_TOKEN) {
 					inToken = true;
-					scanningOffset = true;
+					scanningLength = true;
 				}else if((char) ch.byteValue() == ',' && inToken) {
-					scanningOffset = false;
+					scanningLength = false;
 				}else if(ch.byteValue() == END_OF_TOKEN) {
 					inToken = false;
 					
@@ -117,10 +117,10 @@ class Compressor {
 					length = new ArrayList<Byte>();
 					offset = new ArrayList<Byte>();
 				}else if(inToken) {
-					if(scanningOffset) {
-						offset.add(ch);
-					}else {
+					if(scanningLength) {
 						length.add(ch);
+					}else {
+						offset.add(ch);
 					}
 				}else {
 					output.add(ch.byteValue());
@@ -190,8 +190,8 @@ class Compressor {
 						
 						token = String.format("%c%d,%d%c",
 								START_OF_TOKEN,
-								offset,
 								length,
+								offset,
 								END_OF_TOKEN);
 						if(token.length() > length) {
 							output.addAll(checkedChars);
