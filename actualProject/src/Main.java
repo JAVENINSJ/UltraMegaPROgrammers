@@ -224,7 +224,7 @@ class Compressor {
 			for (Byte bt : output) {
 				sb.append((char) bt.byteValue());
 			}
-
+			sb.append((char) input[input.length-1]);
 			return sb.toString();
 		}
 
@@ -639,21 +639,16 @@ class Compressor {
 			for (int i = 0; i <= 31; i++) {
 				distancePrefixCodes[i] = String.format("%5s", Integer.toBinaryString(i)).replace(" ", "0");
 			}
+			
 			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			int i = 0;
 			int paddingLength = Integer.parseInt(binString.substring(i, i + 8), 2);
 			i += 8 + paddingLength;
-			System.out.println(binString.length());
+			
 			while (i < binString.length()) {
-				if (i > binString.length()) {
-					System.out.println(i);
-					break;
-				}
+				if (i > binString.length()) break;
 				for (int j = 256; j <= 279; j++) {
-					if (i >= binString.length() - 7 + 1) {
-						System.out.println(i);
-						break;
-					}
+					if (i >= binString.length() - 7 + 1) break;
 					if (binString.substring(i, i + 7).equals(llPrefixCodes[j])) {
 						int length = 0, distance;
 						String lengthStr, distanceStr;
@@ -813,15 +808,9 @@ class Compressor {
 					}
 
 				}
-				if (i > binString.length()) {
-					System.out.println(i);
-					break;
-				}
+				if (i > binString.length()) break;
 				for (int l = 0; l <= 143; l++) {
-					if (i >= binString.length() - 8 + 1) {
-						System.out.println(i);
-						break;
-					}
+					if (i >= binString.length() - 8 + 1) break;
 					if (binString.substring(i, i + 8).equals(llPrefixCodes[l])) {
 						bytes.add((byte) l);
 						i += 8;
@@ -829,15 +818,9 @@ class Compressor {
 					}
 
 				}
-				if (i > binString.length()) {
-					System.out.println(i);
-					break;
-				}
+				if (i > binString.length()) break;
 				for (int m = 280; m <= 287; m++) {
-					if (i >= binString.length() - 8 + 1) {
-						System.out.println(i);
-						break;
-					}
+					if (i >= binString.length() - 8 + 1) break;
 					if (binString.substring(i, i + 8).equals(llPrefixCodes[m])) {
 						int length = 0, distance;
 						String lengthStr, distanceStr;
@@ -966,15 +949,9 @@ class Compressor {
 						break;
 					}
 				}
-				if (i > binString.length()) {
-					System.out.println(i);
-					break;
-				}
+				if (i > binString.length()) break;
 				for (int k = 144; k <= 255; k++) {
-					if (i >= binString.length() - 9 + 1) {
-						System.out.println(i);
-						break;
-					}
+					if (i >= binString.length() - 9 + 1) break;
 					if (binString.substring(i, i + 9).equals(llPrefixCodes[k])) {
 						bytes.add((byte) k);
 						i += 9;
@@ -999,11 +976,7 @@ class Compressor {
 		String lzssEncodedText = lzss.encode(input);
 		byte[] lzssEncodedTextAsBytes = lzssEncodedText.getBytes();
 
-		fm.bytesToFile(lzssEncodedTextAsBytes, "textToLZSS");
-
 		byte[] huff = fm.binStrToBytes(Huffman.bitStreamMaker(lzssEncodedTextAsBytes));
-		// byte[] huff = Huffman.bitStreamMaker(lzssEncodedTextAsBytes).getBytes();
-		// byte[] huff = lzssEncodedText.getBytes();
 
 		fm.bytesToFile(huff, archivePath);
 	}
@@ -1017,7 +990,6 @@ class Compressor {
 			sb.append((input[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
 
 		byte[] huffmanBytes = Compressor.Huffman.bitStreamDecoder(sb.toString());
-		fm.bytesToFile(huffmanBytes, "archToLZSS");
 
 		LZSS lzss = this.new LZSS();
 		String lzssDecodedText = lzss.decode(huffmanBytes);
