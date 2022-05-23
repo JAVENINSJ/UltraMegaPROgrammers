@@ -495,7 +495,7 @@ class Compressor {
 						bitSequenceStr
 								.append(String.format("%5s", Integer.toBinaryString(length - 227)).replace(" ", "0"));
 					} else if (length == 258) {
-						bitSequenceStr.append(distancePrefixCodes[285]);
+						bitSequenceStr.append(llPrefixCodes[285]);
 					}
 					j = 0;
 					while (byteArray[i] != 3) {
@@ -620,10 +620,369 @@ class Compressor {
 					bitSequenceStr.append(llPrefixCodes[Byte.toUnsignedInt(byteArray[i])]);
 				}
 			}
-			// System.out.print(bitSequenceStr);
 			return bitSequenceStr.toString();
 		}
 
+		static byte[] bitStreamDecoder(String binString) {
+			String[] llPrefixCodes = new String[288];
+			String[] distancePrefixCodes = new String[32];
+			for (int i = 48; i <= 191; i++) {
+				llPrefixCodes[i - 48] = String.format("%8s", Integer.toBinaryString(i)).replace(" ", "0");
+			}
+			for (int i = 400; i <= 511; i++) {
+				llPrefixCodes[i - 256] = String.format("%9s", Integer.toBinaryString(i)).replace(" ", "0");
+			}
+			for (int i = 0; i <= 23; i++) {
+				llPrefixCodes[i + 256] = String.format("%7s", Integer.toBinaryString(i)).replace(" ", "0");
+			}
+			for (int i = 384; i <= 391; i++) {
+				llPrefixCodes[i - 104] = String.format("%9s", Integer.toBinaryString(i)).replace(" ", "0");
+			}
+			for (int i = 0; i <= 31; i++) {
+				distancePrefixCodes[i] = String.format("%5s", Integer.toBinaryString(i)).replace(" ", "0");
+			}
+			ArrayList<Byte> bytes = new ArrayList<Byte>();
+			int i = 0;
+			while (i < binString.length()) { // binString.length()
+				// System.out.println(i);
+				if (i > binString.length()) {
+					break;
+				}
+				// System.out.println(i);
+				for (int j = 256; j <= 279; j++) {
+					if (i + 7 > binString.length()) {
+						break;
+					}
+					if (binString.substring(i, i + 7).equals(llPrefixCodes[j])) {
+						int length = 0, distance;
+						String lengthStr, distanceStr;
+						char[] lenCharCache, distCharCache;
+						bytes.add((byte) 2);
+						if (j < 265) {
+							length = j - 254;
+							i += 7;
+						} else if (j < 266) {
+							length = 11 + Integer.parseInt(binString.substring(i + 7, i + 8), 2);
+							i += 8;
+						} else if (j < 267) {
+							length = 13 + Integer.parseInt(binString.substring(i + 7, i + 8), 2);
+							i += 8;
+						} else if (j < 268) {
+							length = 15 + Integer.parseInt(binString.substring(i + 7, i + 8), 2);
+							i += 8;
+						} else if (j < 269) {
+							length = 17 + Integer.parseInt(binString.substring(i + 7, i + 8), 2);
+							i += 8;
+						} else if (j < 270) {
+							length = 19 + Integer.parseInt(binString.substring(i + 7, i + 9), 2);
+							i += 9;
+						} else if (j < 271) {
+							length = 23 + Integer.parseInt(binString.substring(i + 7, i + 9), 2);
+							i += 9;
+						} else if (j < 272) {
+							length = 27 + Integer.parseInt(binString.substring(i + 7, i + 9), 2);
+							i += 9;
+						} else if (j < 273) {
+							length = 31 + Integer.parseInt(binString.substring(i + 7, i + 9), 2);
+							i += 9;
+						} else if (j < 274) {
+							length = 35 + Integer.parseInt(binString.substring(i + 7, i + 10), 2);
+							i += 10;
+						} else if (j < 275) {
+							length = 43 + Integer.parseInt(binString.substring(i + 7, i + 10), 2);
+							i += 10;
+						} else if (j < 276) {
+							length = 51 + Integer.parseInt(binString.substring(i + 7, i + 10), 2);
+							i += 10;
+						} else if (j < 277) {
+							length = 59 + Integer.parseInt(binString.substring(i + 7, i + 10), 2);
+							i += 10;
+						} else if (j < 278) {
+							length = 67 + Integer.parseInt(binString.substring(i + 7, i + 11), 2);
+							i += 11;
+						} else if (j < 279) {
+							length = 83 + Integer.parseInt(binString.substring(i + 7, i + 11), 2);
+							i += 11;
+						} else if (j < 280) {
+							length = 99 + Integer.parseInt(binString.substring(i + 7, i + 11), 2);
+							i += 11;
+						}
+						for (int z = 0; z < 31; z++) {
+							if (binString.substring(i, i + 5).equals(distancePrefixCodes[z])) {
+								distance = 0;
+								if (z < 4) {
+									distance = z + 1;
+									i += 5;
+								} else if (z < 5) {
+									distance = 5 + Integer.parseInt(binString.substring(i + 5, i + 6), 2);
+									i += 6;
+								} else if (z < 6) {
+									distance = 7 + Integer.parseInt(binString.substring(i + 5, i + 6), 2);
+									i += 6;
+								} else if (z < 7) {
+									distance = 9 + Integer.parseInt(binString.substring(i + 5, i + 7), 2);
+									i += 7;
+								} else if (z < 8) {
+									distance = 13 + Integer.parseInt(binString.substring(i + 5, i + 7), 2);
+									i += 7;
+								} else if (z < 9) {
+									distance = 17 + Integer.parseInt(binString.substring(i + 5, i + 8), 2);
+									i += 8;
+								} else if (z < 10) {
+									distance = 25 + Integer.parseInt(binString.substring(i + 5, i + 8), 2);
+									i += 8;
+								} else if (z < 11) {
+									distance = 33 + Integer.parseInt(binString.substring(i + 5, i + 9), 2);
+									i += 9;
+								} else if (z < 12) {
+									distance = 49 + Integer.parseInt(binString.substring(i + 5, i + 9), 2);
+									i += 9;
+								} else if (z < 13) {
+									distance = 65 + Integer.parseInt(binString.substring(i + 5, i + 10), 2);
+									i += 10;
+								} else if (z < 14) {
+									distance = 97 + Integer.parseInt(binString.substring(i + 5, i + 10), 2);
+									i += 10;
+								} else if (z < 15) {
+									distance = 129 + Integer.parseInt(binString.substring(i + 5, i + 11), 2);
+									i += 11;
+								} else if (z < 16) {
+									distance = 193 + Integer.parseInt(binString.substring(i + 5, i + 11), 2);
+									i += 11;
+								} else if (z < 17) {
+									distance = 257 + Integer.parseInt(binString.substring(i + 5, i + 12), 2);
+									i += 12;
+								} else if (z < 18) {
+									distance = 385 + Integer.parseInt(binString.substring(i + 5, i + 12), 2);
+									i += 12;
+								} else if (z < 19) {
+									distance = 513 + Integer.parseInt(binString.substring(i + 5, i + 13), 2);
+									i += 13;
+								} else if (z < 20) {
+									distance = 769 + Integer.parseInt(binString.substring(i + 5, i + 13), 2);
+									i += 13;
+								} else if (z < 21) {
+									distance = 1025 + Integer.parseInt(binString.substring(i + 5, i + 14), 2);
+									i += 14;
+								} else if (z < 22) {
+									distance = 1537 + Integer.parseInt(binString.substring(i + 5, i + 14), 2);
+									i += 14;
+								} else if (z < 23) {
+									distance = 2049 + Integer.parseInt(binString.substring(i + 5, i + 15), 2);
+									i += 15;
+								} else if (z < 24) {
+									distance = 3073 + Integer.parseInt(binString.substring(i + 5, i + 15), 2);
+									i += 15;
+								} else if (z < 25) {
+									distance = 4097 + Integer.parseInt(binString.substring(i + 5, i + 16), 2);
+									i += 16;
+								} else if (z < 26) {
+									distance = 6145 + Integer.parseInt(binString.substring(i + 5, i + 16), 2);
+									i += 16;
+								} else if (z < 27) {
+									distance = 8193 + Integer.parseInt(binString.substring(i + 5, i + 17), 2);
+									i += 17;
+								} else if (z < 28) {
+									distance = 12289 + Integer.parseInt(binString.substring(i + 5, i + 17), 2);
+									i += 17;
+								} else if (z < 29) {
+									distance = 16385 + Integer.parseInt(binString.substring(i + 5, i + 18), 2);
+									i += 18;
+								} else if (z < 30) {
+									distance = 24577 + Integer.parseInt(binString.substring(i + 5, i + 18), 2);
+									i += 18;
+								}
+								lengthStr = Integer.toString(length);
+								lenCharCache = lengthStr.toCharArray();
+								for (int k = 0; k < lenCharCache.length; k++) {
+									bytes.add((byte) lenCharCache[k]);
+								}
+								bytes.add((byte) 44);
+								distanceStr = Integer.toString(distance);
+								distCharCache = distanceStr.toCharArray();
+								for (int k = 0; k < distCharCache.length; k++) {
+									bytes.add((byte) distCharCache[k]);
+								}
+								bytes.add((byte) 3);
+								System.out.println(distance);
+								break;
+							}
+
+						}
+						break;
+					}
+
+				}
+				if (i > binString.length()) {
+					break;
+				}
+				for (int l = 0; l <= 143; l++) {
+					if (i + 8 > binString.length()) {
+						break;
+					}
+					if (binString.substring(i, i + 8).equals(llPrefixCodes[l])) {
+						bytes.add((byte) l);
+						i += 8;
+						break;
+					}
+
+				}
+				if (i > binString.length()) {
+					break;
+				}
+				for (int m = 280; m <= 287; m++) {
+					if (i + 8 > binString.length()) {
+						break;
+					}
+					if (binString.substring(i, i + 8).equals(llPrefixCodes[m])) {
+						int length = 0, distance;
+						String lengthStr, distanceStr;
+						char[] lenCharCache, distCharCache;
+						bytes.add((byte) 2);
+						if (m < 281) {
+							length = 115 + Integer.parseInt(binString.substring(i + 7, i + 11), 2);
+							i += 11;
+						} else if (m < 282) {
+							length = 131 + Integer.parseInt(binString.substring(i + 7, i + 12), 2);
+							i += 12;
+						} else if (m < 283) {
+							length = 163 + Integer.parseInt(binString.substring(i + 7, i + 12), 2);
+							i += 12;
+						} else if (m < 284) {
+							length = 195 + Integer.parseInt(binString.substring(i + 7, i + 12), 2);
+							i += 12;
+						} else if (m < 285) {
+							length = 227 + Integer.parseInt(binString.substring(i + 7, i + 12), 2);
+							i += 12;
+						} else if (m < 286) {
+							length = 258;
+							i += 9;
+						}
+						for (int z = 0; z < 31; z++) {
+							if (binString.substring(i, i + 5).equals(distancePrefixCodes[z])) {
+								distance = 0;
+								if (z < 4) {
+									distance = z + 1;
+									i += 5;
+								} else if (z < 5) {
+									distance = 5 + Integer.parseInt(binString.substring(i + 5, i + 6), 2);
+									i += 6;
+								} else if (z < 6) {
+									distance = 7 + Integer.parseInt(binString.substring(i + 5, i + 6), 2);
+									i += 6;
+								} else if (z < 7) {
+									distance = 9 + Integer.parseInt(binString.substring(i + 5, i + 7), 2);
+									i += 7;
+								} else if (z < 8) {
+									distance = 13 + Integer.parseInt(binString.substring(i + 5, i + 7), 2);
+									i += 7;
+								} else if (z < 9) {
+									distance = 17 + Integer.parseInt(binString.substring(i + 5, i + 8), 2);
+									i += 8;
+								} else if (z < 10) {
+									distance = 25 + Integer.parseInt(binString.substring(i + 5, i + 8), 2);
+									i += 8;
+								} else if (z < 11) {
+									distance = 33 + Integer.parseInt(binString.substring(i + 5, i + 9), 2);
+									i += 9;
+								} else if (z < 12) {
+									distance = 49 + Integer.parseInt(binString.substring(i + 5, i + 9), 2);
+									i += 9;
+								} else if (z < 13) {
+									distance = 65 + Integer.parseInt(binString.substring(i + 5, i + 10), 2);
+									i += 10;
+								} else if (z < 14) {
+									distance = 97 + Integer.parseInt(binString.substring(i + 5, i + 10), 2);
+									i += 10;
+								} else if (z < 15) {
+									distance = 129 + Integer.parseInt(binString.substring(i + 5, i + 11), 2);
+									i += 11;
+								} else if (z < 16) {
+									distance = 193 + Integer.parseInt(binString.substring(i + 5, i + 11), 2);
+									i += 11;
+								} else if (z < 17) {
+									distance = 257 + Integer.parseInt(binString.substring(i + 5, i + 12), 2);
+									i += 12;
+								} else if (z < 18) {
+									distance = 385 + Integer.parseInt(binString.substring(i + 5, i + 12), 2);
+									i += 12;
+								} else if (z < 19) {
+									distance = 513 + Integer.parseInt(binString.substring(i + 5, i + 13), 2);
+									i += 13;
+								} else if (z < 20) {
+									distance = 769 + Integer.parseInt(binString.substring(i + 5, i + 13), 2);
+									i += 13;
+								} else if (z < 21) {
+									distance = 1025 + Integer.parseInt(binString.substring(i + 5, i + 14), 2);
+									i += 14;
+								} else if (z < 22) {
+									distance = 1537 + Integer.parseInt(binString.substring(i + 5, i + 14), 2);
+									i += 14;
+								} else if (z < 23) {
+									distance = 2049 + Integer.parseInt(binString.substring(i + 5, i + 15), 2);
+									i += 15;
+								} else if (z < 24) {
+									distance = 3073 + Integer.parseInt(binString.substring(i + 5, i + 15), 2);
+									i += 15;
+								} else if (z < 25) {
+									distance = 4097 + Integer.parseInt(binString.substring(i + 5, i + 16), 2);
+									i += 16;
+								} else if (z < 26) {
+									distance = 6145 + Integer.parseInt(binString.substring(i + 5, i + 16), 2);
+									i += 16;
+								} else if (z < 27) {
+									distance = 8193 + Integer.parseInt(binString.substring(i + 5, i + 17), 2);
+									i += 17;
+								} else if (z < 28) {
+									distance = 12289 + Integer.parseInt(binString.substring(i + 5, i + 17), 2);
+									i += 17;
+								} else if (z < 29) {
+									distance = 16385 + Integer.parseInt(binString.substring(i + 5, i + 18), 2);
+									i += 18;
+								} else if (z < 30) {
+									distance = 24577 + Integer.parseInt(binString.substring(i + 5, i + 18), 2);
+									i += 18;
+								}
+								lengthStr = Integer.toString(length);
+								lenCharCache = lengthStr.toCharArray();
+								for (int k = 0; k < lenCharCache.length; k++) {
+									bytes.add((byte) lenCharCache[k]);
+								}
+								bytes.add((byte) 44);
+								distanceStr = Integer.toString(distance);
+								distCharCache = distanceStr.toCharArray();
+								for (int k = 0; k < distCharCache.length; k++) {
+									bytes.add((byte) distCharCache[k]);
+								}
+								bytes.add((byte) 3);
+								break;
+							}
+
+						}
+						break;
+					}
+				}
+				if (i > binString.length()) {
+					break;
+				}
+				for (int k = 144; k <= 255; k++) {
+					if (i + 9 > binString.length()) {
+						break;
+					}
+					if (binString.substring(i, i + 9).equals(llPrefixCodes[k])) {
+						bytes.add((byte) k);
+						i += 9;
+						break;
+					}
+				}
+
+			}
+			byte[] decodedBytes = new byte[bytes.size()];
+			for (int q = 0; q < bytes.size(); q++) {
+				decodedBytes[q] = bytes.get(q).byteValue();
+			}
+			return decodedBytes;
+		}
 	}
 
 	public String compressFile(String filePath, String archivePath) {
@@ -633,15 +992,21 @@ class Compressor {
 		String lzssEncodedText = lzss.encode(input);
 		byte[] lzssEncodedTextAsBytes = lzssEncodedText.getBytes();
 
-		fm.bytesToFile(lzssEncodedTextAsBytes, archivePath);
+		fm.bytesToFile(fm.binStrToBytes(Compressor.Huffman.bitStreamMaker(lzssEncodedTextAsBytes)), archivePath);
 		return lzssEncodedText;
 	}
 
 	public void decompressFile(String archivePath, String filePath) {
-		LZSS lzss = this.new LZSS();
+
 		byte[] input = fm.fileToBytes(archivePath);
 
-		String lzssDecodedText = lzss.decode(input);
+		StringBuilder sb = new StringBuilder(input.length * Byte.SIZE);
+		for (int i = 0; i < Byte.SIZE * input.length; i++)
+			sb.append((input[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
+
+		LZSS lzss = this.new LZSS();
+
+		String lzssDecodedText = lzss.decode(Compressor.Huffman.bitStreamDecoder(sb.toString()));
 		byte[] lzssDecodedTextAsBytes = lzssDecodedText.getBytes();
 
 		fm.bytesToFile(lzssDecodedTextAsBytes, filePath);
@@ -656,33 +1021,31 @@ public class Main {
 	public static void main(String[] args) {
 		compressor = new Compressor();
 		compressor.compressFile("test222.txt", "archive1");
-		String lzss = compressor.compressFile("test222.txt", "archive1");
+		// String lzss = compressor.compressFile("test222.txt", "archive1");
 		// System.out.println(lzss);
 
 		String fileName = "archive1";
 		byte[] byteArray = FileManipulator.fileToBytes(fileName);
-		// System.out.println(byteArray.length);
-		for (int i = 0; i < byteArray.length; i++) {
-			// System.out.println(" " + Byte.toUnsignedInt(byteArray[i]));
-		}
-		// System.out.println();
-		int frequencies[] = Compressor.Huffman.frequencyCounter(byteArray);
-		// System.out.println("frequency");
-		for (int i = 0; i < frequencies.length; i++) {
-			// System.out.println((char) i + " " + frequencies[i]);
-		}
 
-		// System.out.println("Jānis lika");
 		Compressor.Huffman.bitStreamMaker(byteArray);
 		String chuska;
 		chuska = Compressor.Huffman.bitStreamMaker(byteArray);
-		System.out.println(chuska.length()/8);
-		System.out.println(chuska.substring(37500));
-		FileManipulator.bytesToFile(
-				FileManipulator.binStrToBytes(chuska),
-				"archive200"
-			);
-		
+		FileManipulator.bytesToFile(FileManipulator.binStrToBytes(chuska), "archive200");
+
+//		ArrayList<Byte> decodedBytesList = Compressor.Huffman.bitStreamDecoder(chuska);
+//		byte[] decodedBytes = new byte[decodedBytesList.size()];
+//		for (int i = 0; i < decodedBytesList.size(); i++) {
+//			decodedBytes[i] = decodedBytesList.get(i).byteValue();
+//		}
+
+//		for (int i = 0; i < decodedBytes.length; i++) {
+//			System.out.println(Byte.toUnsignedInt(decodedBytes[i]) + " " + Byte.toUnsignedInt(byteArray[i]));
+//		}
+//		if (decodedBytes.length == byteArray.length) {
+//			System.out.println("equal");
+//		} else {
+//			System.out.println("not equal");
+//		}
 
 		Scanner sc = new Scanner(System.in);
 		compressor = new Compressor();
