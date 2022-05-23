@@ -15,12 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
 import java.util.Scanner;
 
 class FileManipulator {
@@ -1012,6 +1007,7 @@ class Compressor {
 		
 		LZSS lzss = this.new LZSS();		
 		String lzssDecodedText = lzss.decode(huffmanBytes);
+
 		byte[] lzssDecodedTextAsBytes = lzssDecodedText.getBytes();
 
 		fm.bytesToFile(lzssDecodedTextAsBytes, filePath);
@@ -1024,7 +1020,7 @@ public class Main {
 	static Compressor compressor;
 
 	public static void main(String[] args) {
-		
+
 		Scanner sc = new Scanner(System.in);
 		compressor = new Compressor();
 		String choiceStr, sourceFile, resultFile, firstFile, secondFile;
