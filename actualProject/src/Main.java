@@ -388,8 +388,6 @@ class Compressor {
 				distancePrefixCodes[i] = String.format("%5s", Integer.toBinaryString(i)).replace(" ", "0");
 			}
 			StringBuilder bitSequenceStr = new StringBuilder();
-			int[] llFrequencies = new int[286];
-			int[] distFrequencies = new int[30];
 			int distance, length, j = 0;
 			String distanceStr, lengthStr;
 			for (int i = 0; i < byteArray.length; i++) {
@@ -614,7 +612,13 @@ class Compressor {
 					bitSequenceStr.append(llPrefixCodes[Byte.toUnsignedInt(byteArray[i])]);
 				}
 			}
-			return bitSequenceStr.toString();
+
+			int padding = bitSequenceStr.length() % 8;
+			String paddingLengthString = String.format("%8s", Integer.toBinaryString(padding)).replace(" ", "0");
+			String paddingSize = "%" + padding + "s";
+			String paddingStr = String.format(paddingSize, "").replace(" ", "0");
+			String bitSequenceStr1 = paddingLengthString + paddingStr + bitSequenceStr.toString();
+			return bitSequenceStr1;
 		}
 
 		static byte[] bitStreamDecoder(String binString) {
@@ -637,14 +641,17 @@ class Compressor {
 			}
 			ArrayList<Byte> bytes = new ArrayList<Byte>();
 			int i = 0;
-			while (i < binString.length()) { // binString.length()
-				// System.out.println(i);
+			int paddingLength = Integer.parseInt(binString.substring(i, i + 8), 2);
+			i += 8 + paddingLength;
+			System.out.println(binString.length());
+			while (i < binString.length()) {
 				if (i > binString.length()) {
+					System.out.println(i);
 					break;
 				}
-				// System.out.println(i);
 				for (int j = 256; j <= 279; j++) {
-					if (i + 7 > binString.length()) {
+					if (i >= binString.length() - 7 + 1) {
+						System.out.println(i);
 						break;
 					}
 					if (binString.substring(i, i + 7).equals(llPrefixCodes[j])) {
@@ -798,7 +805,6 @@ class Compressor {
 									bytes.add((byte) distCharCache[k]);
 								}
 								bytes.add((byte) 3);
-								System.out.println(distance);
 								break;
 							}
 
@@ -808,10 +814,12 @@ class Compressor {
 
 				}
 				if (i > binString.length()) {
+					System.out.println(i);
 					break;
 				}
 				for (int l = 0; l <= 143; l++) {
-					if (i + 8 > binString.length()) {
+					if (i >= binString.length() - 8 + 1) {
+						System.out.println(i);
 						break;
 					}
 					if (binString.substring(i, i + 8).equals(llPrefixCodes[l])) {
@@ -822,10 +830,12 @@ class Compressor {
 
 				}
 				if (i > binString.length()) {
+					System.out.println(i);
 					break;
 				}
 				for (int m = 280; m <= 287; m++) {
-					if (i + 8 > binString.length()) {
+					if (i >= binString.length() - 8 + 1) {
+						System.out.println(i);
 						break;
 					}
 					if (binString.substring(i, i + 8).equals(llPrefixCodes[m])) {
@@ -957,10 +967,12 @@ class Compressor {
 					}
 				}
 				if (i > binString.length()) {
+					System.out.println(i);
 					break;
 				}
 				for (int k = 144; k <= 255; k++) {
-					if (i + 9 > binString.length()) {
+					if (i >= binString.length() - 9 + 1) {
+						System.out.println(i);
 						break;
 					}
 					if (binString.substring(i, i + 9).equals(llPrefixCodes[k])) {
@@ -980,32 +992,34 @@ class Compressor {
 	}
 
 	public void compressFile(String filePath, String archivePath) {
-		
+
 		byte[] input = fm.fileToBytes(filePath);
-		
+
 		LZSS lzss = this.new LZSS();
 		String lzssEncodedText = lzss.encode(input);
 		byte[] lzssEncodedTextAsBytes = lzssEncodedText.getBytes();
-		
+
 		fm.bytesToFile(lzssEncodedTextAsBytes, "textToLZSS");
-		
+
 		byte[] huff = fm.binStrToBytes(Huffman.bitStreamMaker(lzssEncodedTextAsBytes));
-		
+		// byte[] huff = Huffman.bitStreamMaker(lzssEncodedTextAsBytes).getBytes();
+		// byte[] huff = lzssEncodedText.getBytes();
+
 		fm.bytesToFile(huff, archivePath);
 	}
 
 	public void decompressFile(String archivePath, String filePath) {
-		
+
 		byte[] input = fm.fileToBytes(archivePath);
-		
+
 		StringBuilder sb = new StringBuilder(input.length * Byte.SIZE);
 		for (int i = 0; i < Byte.SIZE * input.length; i++)
 			sb.append((input[i / Byte.SIZE] << i % Byte.SIZE & 0x80) == 0 ? '0' : '1');
-		
+
 		byte[] huffmanBytes = Compressor.Huffman.bitStreamDecoder(sb.toString());
 		fm.bytesToFile(huffmanBytes, "archToLZSS");
-		
-		LZSS lzss = this.new LZSS();		
+
+		LZSS lzss = this.new LZSS();
 		String lzssDecodedText = lzss.decode(huffmanBytes);
 
 		byte[] lzssDecodedTextAsBytes = lzssDecodedText.getBytes();
