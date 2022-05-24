@@ -231,6 +231,7 @@ class Compressor {
 	}
 
 	public class Huffman {
+		
 		static int[] frequencyCounter(byte[] byteArray) {
 			int[] llFrequencies = new int[286];
 			int[] distFrequencies = new int[30];
@@ -618,6 +619,7 @@ class Compressor {
 			String paddingSize = "%" + padding + "s";
 			String paddingStr = String.format(paddingSize, "").replace(" ", "0");
 			String bitSequenceStr1 = paddingLengthString + paddingStr + bitSequenceStr.toString();
+			
 			return bitSequenceStr1;
 		}
 
@@ -644,15 +646,19 @@ class Compressor {
 			int i = 0;
 			int paddingLength = Integer.parseInt(binString.substring(i, i + 8), 2);
 			i += 8 + paddingLength;
+			int length, distance;
+			String lengthStr, distanceStr;
+			char[] lenCharCache, distCharCache;
 			
 			while (i < binString.length()) {
-				if (i > binString.length()) break;
 				for (int j = 256; j <= 279; j++) {
-					if (i >= binString.length() - 7 + 1) break;
+					if (i >= binString.length() - 6) break;
 					if (binString.substring(i, i + 7).equals(llPrefixCodes[j])) {
-						int length = 0, distance;
-						String lengthStr, distanceStr;
-						char[] lenCharCache, distCharCache;
+						length = 0;
+						distance = 0;
+						lengthStr = "";
+						distanceStr = "";
+						
 						bytes.add((byte) 2);
 						if (j < 265) {
 							length = j - 254;
@@ -802,12 +808,11 @@ class Compressor {
 								bytes.add((byte) 3);
 								break;
 							}
-
 						}
 						break;
 					}
-
 				}
+				
 				if (i > binString.length()) break;
 				for (int l = 0; l <= 143; l++) {
 					if (i >= binString.length() - 8 + 1) break;
@@ -822,9 +827,10 @@ class Compressor {
 				for (int m = 280; m <= 287; m++) {
 					if (i >= binString.length() - 8 + 1) break;
 					if (binString.substring(i, i + 8).equals(llPrefixCodes[m])) {
-						int length = 0, distance;
-						String lengthStr, distanceStr;
-						char[] lenCharCache, distCharCache;
+						length = 0;
+						distance = 0;
+						lengthStr = "";
+						distanceStr = "";
 						bytes.add((byte) 2);
 						if (m < 281) {
 							length = 115 + Integer.parseInt(binString.substring(i + 7, i + 11), 2);
@@ -944,7 +950,6 @@ class Compressor {
 								bytes.add((byte) 3);
 								break;
 							}
-
 						}
 						break;
 					}
