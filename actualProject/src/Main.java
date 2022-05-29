@@ -78,7 +78,7 @@ class Compressor {
 
 	private static FileManipulator fm = new FileManipulator();
 
-	private class LZSS {
+	public class LZSS {
 
 		final int SLIDING_WINDOW_SIZE = 4096;
 		final byte START_OF_TOKEN = 2;
@@ -169,7 +169,7 @@ class Compressor {
 			return encode(input.getBytes());
 		}
 
-		private String encode(byte[] input) {
+		public String encode(byte[] input) {
 
 			List<Byte> searchBuffer = new ArrayList<Byte>();
 			ArrayList<Byte> checkedChars = new ArrayList<Byte>();
@@ -177,7 +177,7 @@ class Compressor {
 			List<Byte> output = new ArrayList<Byte>();
 			String token;
 			int i = 0, index, offset, length;
-
+			
 			for (Byte bt : input) {
 				index = elementsInArray(checkedChars, searchBuffer);
 
@@ -219,13 +219,13 @@ class Compressor {
 
 				i++;
 			}
-
-			StringBuilder sb = new StringBuilder();
-			for (Byte bt : output) {
-				sb.append((char) bt.byteValue());
+			
+			output.add(input[input.length - 1]);
+			byte[] out = new byte[output.size()];
+			for(int i1 = 0; i1 < output.size(); i1++) {
+				out[i1] = output.get(i1);
 			}
-			sb.append((char) input[input.length - 1]);
-			return sb.toString();
+			return new String(out, StandardCharsets.UTF_8);
 		}
 
 	}
